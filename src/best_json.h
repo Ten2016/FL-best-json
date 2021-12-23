@@ -15,22 +15,31 @@
 
 typedef enum {
     json_null,
-    json_int,
+    json_int
 
 } type_e;
 
 typedef struct {
     type_e type;
-    enum {
-
-    }
+    const char *key;
+    union {
+        long integer;
+        double number;
+        char *string;
+    };
 
 } json_t;
 
-const char *json_dump();
+// 序列化json，输出标准字符串
+const char *json_dump(const json_t *json);
 
+// 序列化json，输出格式化字符串
+const char *json_dump_fmt(const json_t *json);
+
+// 加载json，从字符串读入
 json_t *json_load_str(const char *str);
 
+// 加载json，从文件读入
 json_t *json_load_file(const char *fname);
 
 
