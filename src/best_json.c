@@ -10,6 +10,7 @@
  */
 
 #include <stdio.h>
+#include <ctype.h>
 #include <assert.h>
 #include <stddef.h>
 #include <string.h>
@@ -117,6 +118,24 @@ static char *append_space(char *p_str, int number)
 
 
 /**
+ * @brief 跳过空格
+ * 
+ * @param p_str     [in] 待跳过的字符串地址 
+ * @return char*    跳过指定字符后的字符串地址
+ */
+static const char *jump_space(const char *p_str)
+{
+    assert(p_str);
+    
+    while (isspace(*p_str)) {
+        p_str++;
+    }
+
+    return p_str;
+}
+
+
+/**
  * @brief 格式化
  * 
  * @param old_str       [in] 格式化前字符串
@@ -134,18 +153,13 @@ static int json_format_(const char **old_str, char **new_str, char c, int curr_d
         return 0;
     }
 
-    char struct_c = c;
+    *old_str = jump_space(*old_str);
+
+    char struct_c = **old_str;
 
     if (**old_str == '{' || **old_str == '[') {
-        struct_c = **old_str;
-
-        *new_str = append_space(*new_str, 1);
-
-        **new_str = struct_c;
-        (*new_str)++;
-
-        **new_str = '\n';
-        (*new_str)++;
+        **new_str = **old_str;      (*new_str)++;
+        **new_str = '\n';           (*new_str)++;
 
         curr_depth++;
         *new_str = append_space(*new_str, curr_depth * BJSON_SPACE_LEN);
@@ -153,37 +167,36 @@ static int json_format_(const char **old_str, char **new_str, char c, int curr_d
         (*old_str)++;
     }
     else if (**old_str == '}' || **old_str == ']') {
-
-        struct_c = **old_str;
+        **new_str = '\n';
+        (*new_str)++;
 
         curr_depth--;
-
-        **new_str = '\n';
-        (*new_str)++;
-
         *new_str = append_space(*new_str, curr_depth * BJSON_SPACE_LEN);
 
-        **new_str = struct_c;
-        (*new_str)++;
-
-        **new_str = '\n';
-        (*new_str)++;
+        **new_str = **old_str;      (*new_str)++;
 
         (*old_str)++;
+        *old_str = jump_space(*old_str);
+
+        if (**old_str != ',') {
+            **new_str = '\n';
+            (*new_str)++;
+        }
     }
     else if (**old_str == ',') {
-        **new_str = **old_str;
-        (*new_str)++;
-
-        **new_str = '\n';
-        (*new_str)++;
+        **new_str = **old_str;      (*new_str)++;
+        **new_str = '\n';           (*new_str)++;
 
         *new_str = append_space(*new_str, curr_depth * BJSON_SPACE_LEN);
+        (*old_str)++;
+    }
+    else if (**old_str == ':') {
+        **new_str = **old_str;      (*new_str)++;
+        *new_str = append_space(*new_str, 1);
         (*old_str)++;
     }
     else {
-        **new_str = **old_str;
-        (*new_str)++;
+        **new_str = **old_str;      (*new_str)++;
         (*old_str)++;
     }
 
