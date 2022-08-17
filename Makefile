@@ -3,24 +3,30 @@ target: main
 SRC_DIR=src
 SRC_FILE=best_json.c
 
-INCLUDE_FILE=best_json.h
+LIB_DIR=lib
+LIB_A=libjson.a
+LIB_SO=libjson.so
 
-DST_LIB_A=libjson.a
-DST_LIB_SO=libjson.so
+INCLUDE_DIR=include
+INCLUDE_FILE=*.h
+
 
 main:
 	@echo make
-	gcc -g -c $(SRC_DIR)/$(SRC_FILE) -o $(SRC_DIR)/$(DST_LIB_A)
-	gcc -g -fPIC -shared $(SRC_DIR)/$(SRC_FILE) -o $(SRC_DIR)/$(DST_LIB_SO)
+	# gcc -g -c $(SRC_DIR)/$(SRC_FILE) -o $(SRC_DIR)/$(LIB_A)
+	gcc -g -fPIC -shared $(SRC_DIR)/$(SRC_FILE) -o $(SRC_DIR)/$(LIB_SO)
 
 
 install:
-	mv -Force $(SRC_DIR)/$(DST_LIB_A) lib
-	mv -Force $(SRC_DIR)/$(DST_LIB_SO) lib
-	cp -Force $(SRC_DIR)/INCLUDE_FILE include
+	@echo install
+	rm -rf $(LIB_DIR) && mkdir $(LIB_DIR)
+	# mv $(SRC_DIR)/$(LIB_A) $(LIB_DIR)
+	mv $(SRC_DIR)/$(LIB_SO) $(LIB_DIR)
+	mkdir -p $(INCLUDE_DIR) && cp -f $(SRC_DIR)/$(INCLUDE_FILE) $(INCLUDE_DIR)
 
 clean:
 	@echo clean
-	rm -f src/*.a
-	rm -f src/*.so
-	rm -f lib/*
+	rm -f $(SRC_DIR)/*.a
+	rm -f $(SRC_DIR)/*.so
+	rm -rf $(LIB_DIR)/*
+	rm -f $(INCLUDE_DIR)/$(INCLUDE_FILE)

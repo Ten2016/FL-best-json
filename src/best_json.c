@@ -12,9 +12,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <assert.h>
-#include <stddef.h>
 #include <string.h>
-#include <stdlib.h>
 
 
 #include "best_json.h"
@@ -43,7 +41,21 @@ const char *json_dump(const json_t *json)
  * @param json 
  * @return const char* 
  */
-const char *json_dump_fmt(const json_t *json)
+const char *json_dump_format(const json_t *json)
+{
+
+
+
+    return NULL;
+}
+
+/**
+ * @brief 序列化json，输出格式化字符串
+ * 
+ * @param json 
+ * @return const char* 
+ */
+const char *json_dump_simple(const json_t *json)
 {
 
 
@@ -59,6 +71,20 @@ const char *json_dump_fmt(const json_t *json)
  * @return json_t* 
  */
 json_t *json_load_str(const char *str)
+{
+
+
+
+    return NULL;
+}
+
+/**
+ * @brief 加载json，从字符串读入
+ * 
+ * @param str 
+ * @return json_t* 
+ */
+json_t *json_load_str_n(const char *str)
 {
 
 
@@ -210,7 +236,7 @@ static int json_format_(const char **old_str, char **new_str, char c, int curr_d
  * @param mode      [in] 模式
  * @return char* 格式化后的字符串
  */
-char *json_format(const char *json_str, fmt_mode_t mode)
+char *json_str_format(const char *json_str, fmt_mode_t mode)
 {
     if (!json_str) {
         return NULL;
