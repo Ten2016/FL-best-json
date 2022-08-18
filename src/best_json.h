@@ -13,13 +13,14 @@
 #ifndef __BEST_JSON_H
 #define __BEST_JSON_H
 
-#include "best_json_def.h"
+#include <stddef.h>
 
 
 
-// 版本号
-#define BJSON_VERSION   "1.0.0"
-
+#define BJSON_VERSION           "1.0.0"             // 版本号
+#define BJSON_VERSION_MAJOR     (1)
+#define BJSON_VERSION_MINOR     (0)
+#define BJSON_VERSION_PATCH     (0)
 
 
 #define BJSON_DEPTH_MAX         (64)                // json 最大嵌套深度
@@ -29,16 +30,47 @@
 
 
 
+// json 布尔类型
+typedef int json_bool;
+#define bool_true               (1)
+#define bool_false              (0)
+
+// json 整型类型
+typedef long long json_int;
+
+// json 浮点类型
+typedef double json_float;
+
+// json 结构
+typedef struct json_t json_t;
+
+// json 类型
+typedef enum {
+    json_type_null,                  // 空值
+    json_type_bool,                  // 布尔值
+    json_type_int,                   // 整型值[64位]
+    json_type_float,                 // 浮点值[64位]
+    json_type_string,                // 字符串
+    json_type_array,                 // 数组
+    json_type_object,                // 对象
+    json_type_max,
+} json_type_e;
+
+
 
 typedef enum {
     MODE_ANY,
     MODE_OBJ_ARR
 } fmt_mode_t;
 
+
+
+
 /************************  以下为对外接口  ************************/
 
 
 // 类型检查
+#define json_type(json)         ((json)->type)
 #define json_is_null(json)      ((json) && json_type(json) == json_type_null)
 #define json_is_bool(json)      ((json) && json_type(json) == json_type_bool)
 #define json_is_int(json)       ((json) && json_type(json) == json_type_int)
@@ -61,13 +93,16 @@ json_t* json_new_object();
 // 递归释放
 void json_delete(json_t *json);
 
-// 深拷贝
-json_t* json_deep_copy(const json_t *json);
+
 
 // 添加
 
 
 // 删除
+
+
+// 深拷贝
+json_t* json_deep_copy(const json_t *json);
 
 
 // 合并

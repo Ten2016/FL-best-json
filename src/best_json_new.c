@@ -10,6 +10,7 @@
  */
 
 #include "best_json.h"
+#include "best_json_def.h"
 
 
 json_t* json_new_null()
@@ -83,20 +84,58 @@ json_t* json_new_string_n(const char *json_s, size_t size)
         return NULL;
     }
 
-    json_t *json = (json_t*)calloc(1, JSON_T_SIZE + size);
+    json_t *json = JSON_S_CALLOC(size);
     if (!json) {
         return NULL;
     }
 
     json->type = json_type_string;
-    json->val_s = memcpy(json + JSON_T_SIZE, json_s, size);
+    json->val_s = json + JSON_T_SIZE;
+
+    json->val_s->size = size;
+    json->val_s->v_s = memcpy(json + JSON_S_SIZE, json_s, size);
 
     return json;
 }
 
 
-json_t* json_new_array();
-json_t* json_new_object();
+json_t* json_new_array()
+{
+    json_t *json = JSON_T_CALLOC;
+    if (!json) {
+        return NULL;
+    }
+
+    json->type = json_type_array;
+    json->val_a = NULL;
+
+    return json;
+}
+
+
+json_t* json_new_object()
+{
+    json_t *json = JSON_T_CALLOC;
+    if (!json) {
+        return NULL;
+    }
+
+    json->type = json_type_object;
+    json->val_o = NULL;
+
+    return json;    
+}
+
+
+void json_delete(json_t *json)
+{
+    if (!json) {
+        return ;
+    }
+
+    
+    return ;
+}
 
 
 
