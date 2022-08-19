@@ -70,8 +70,10 @@ typedef enum {
     json_err_param_invalid_1 = 1,
     json_err_param_invalid_2 = 2,
     json_err_param_invalid_3 = 3,
-    json_err_memory_malloc   = 4,
-    json_err_xxx,
+    json_err_memory_insufficient = 4,
+    json_err_depth_max = 5,
+    json_err_child_max = 6,
+    json_err_string_max = 7,
 } json_code_e;
 
 
@@ -99,17 +101,8 @@ json_t* json_new_string_n(const char *json_s, size_t size);
 json_t* json_new_array();
 json_t* json_new_object();
 
-// 递归释放
-void json_delete(json_t *json);
 
 // 添加
-json_code_e json_object_add_null(json_t *json,   const char *key, const json_t *json_n);
-json_code_e json_object_add_bool(json_t *json,   const char *key, const json_t *json_b);
-json_code_e json_object_add_int(json_t *json,    const char *key, const json_t *json_i);
-json_code_e json_object_add_float(json_t *json,  const char *key, const json_t *json_f);
-json_code_e json_object_add_string(json_t *json, const char *key, const json_t *json_s);
-json_code_e json_object_add_array(json_t *json,  const char *key, const json_t *json_a);
-json_code_e json_object_add_object(json_t *json, const char *key, const json_t *json_o);
 
 json_code_e json_array_add_null(json_t *json,   const json_t *json_n);
 json_code_e json_array_add_bool(json_t *json,   const json_t *json_b);
@@ -119,10 +112,23 @@ json_code_e json_array_add_string(json_t *json, const json_t *json_s);
 json_code_e json_array_add_array(json_t *json,  const json_t *json_a);
 json_code_e json_array_add_object(json_t *json, const json_t *json_o);
 
+json_code_e json_object_add_null(json_t *json,   const char *key, const json_t *json_n);
+json_code_e json_object_add_bool(json_t *json,   const char *key, const json_t *json_b);
+json_code_e json_object_add_int(json_t *json,    const char *key, const json_t *json_i);
+json_code_e json_object_add_float(json_t *json,  const char *key, const json_t *json_f);
+json_code_e json_object_add_string(json_t *json, const char *key, const json_t *json_s);
+json_code_e json_object_add_array(json_t *json,  const char *key, const json_t *json_a);
+json_code_e json_object_add_object(json_t *json, const char *key, const json_t *json_o);
+
 
 // 删除
 json_code_e json_array_delete(json_t *json, size_t index);
 json_code_e json_object_delete(json_t *json, const char *key);
+
+// 清空
+void json_delete(json_t *json);
+void json_array_clear(json_t *json);
+void json_object_clear(json_t *json);
 
 
 

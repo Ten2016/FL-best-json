@@ -93,7 +93,8 @@ json_t* json_new_string_n(const char *json_s, size_t size)
     json->val_s = json + JSON_T_SIZE;
 
     json->val_s->size = size;
-    json->val_s->v_s = memcpy(json + JSON_S_SIZE, json_s, size);
+    json->val_s->v_s = json + JSON_S_SIZE;
+    memcpy(json->val_s->v_s, json_s, size);
 
     return json;
 }
@@ -101,13 +102,16 @@ json_t* json_new_string_n(const char *json_s, size_t size)
 
 json_t* json_new_array()
 {
-    json_t *json = JSON_T_CALLOC;
+    json_t *json = JSON_S_CALLOC(0);
     if (!json) {
         return NULL;
     }
 
     json->type = json_type_array;
-    json->val_a = NULL;
+    json->val_a = json + JSON_T_SIZE;
+
+    json->val_a->size = 0;
+    json->val_a->v_a = NULL;
 
     return json;
 }
@@ -115,13 +119,16 @@ json_t* json_new_array()
 
 json_t* json_new_object()
 {
-    json_t *json = JSON_T_CALLOC;
+    json_t *json = JSON_S_CALLOC(0);
     if (!json) {
         return NULL;
     }
 
     json->type = json_type_object;
-    json->val_o = NULL;
+    json->val_o = json + JSON_T_SIZE;
+
+    json->val_o->size = 0;
+    json->val_o->v_a = NULL;
 
     return json;    
 }
