@@ -64,6 +64,15 @@ typedef enum {
 } fmt_mode_t;
 
 
+// 错误码
+typedef enum {
+    json_success = 0,
+    json_err_param_invalid_1 = 1,
+    json_err_param_invalid_2 = 2,
+    json_err_param_invalid_3 = 3,
+    json_err_memory_malloc   = 4,
+    json_err_xxx,
+} json_code_e;
 
 
 /************************  以下为对外接口  ************************/
@@ -93,23 +102,40 @@ json_t* json_new_object();
 // 递归释放
 void json_delete(json_t *json);
 
-
-
 // 添加
+json_code_e json_object_add_null(json_t *json,   const char *key, const json_t *json_n);
+json_code_e json_object_add_bool(json_t *json,   const char *key, const json_t *json_b);
+json_code_e json_object_add_int(json_t *json,    const char *key, const json_t *json_i);
+json_code_e json_object_add_float(json_t *json,  const char *key, const json_t *json_f);
+json_code_e json_object_add_string(json_t *json, const char *key, const json_t *json_s);
+json_code_e json_object_add_array(json_t *json,  const char *key, const json_t *json_a);
+json_code_e json_object_add_object(json_t *json, const char *key, const json_t *json_o);
+
+json_code_e json_array_add_null(json_t *json,   const json_t *json_n);
+json_code_e json_array_add_bool(json_t *json,   const json_t *json_b);
+json_code_e json_array_add_int(json_t *json,    const json_t *json_i);
+json_code_e json_array_add_float(json_t *json,  const json_t *json_f);
+json_code_e json_array_add_string(json_t *json, const json_t *json_s);
+json_code_e json_array_add_array(json_t *json,  const json_t *json_a);
+json_code_e json_array_add_object(json_t *json, const json_t *json_o);
 
 
 // 删除
+json_code_e json_array_delete(json_t *json, size_t index);
+json_code_e json_object_delete(json_t *json, const char *key);
+
 
 
 // 深拷贝
-json_t* json_deep_copy(const json_t *json);
+json_code_e json_deep_copy(const json_t *json);
 
 
 // 合并
-json_t* json_merge_array(const json_t *json_src, json_t *json_dst);
-json_t* json_merge_object(const json_t *json_src, json_t *json_dst);
+json_code_e json_merge_array(const json_t *json_dst, json_t *json_src);
+json_code_e json_merge_object(const json_t *json_dst, json_t *json_src);
 
 
+// 遍历
 
 
 

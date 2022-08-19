@@ -1,7 +1,7 @@
 /**
  * @file best_json_copy.c
- * @author your name (you@domain.com)
- * @brief 
+ * @author tjl
+ * @brief  拷贝、合并相关操作
  * @version 0.1
  * @date 2022-08-18
  * 
